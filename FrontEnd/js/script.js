@@ -1,31 +1,56 @@
 // fetch pour aller chercher les travaux
-const works = fetch("http://localhost:5678/api/works")
-  .then((response) => response.json())
-  .then((works) =>
-    works.forEach((element) => {
-      const img = document.createElement("img");
-      img.src = element.imageUrl;
-      img.alt = element.title;
+async function fetchWorks() {
+  const response = await fetch("http://localhost:5678/api/works");
+  const data = await response.json();
+  displayWorks(data);
+  console.log(data);
 
-      const figcaption = document.createElement("figcaption");
-      figcaption.innerText = element.title;
+  return data;
+}
 
-      const figure = document.createElement("figure");
-      figure.append(img, figcaption);
-      figure.classList.add("work");
-      figure.dataset.category = element.categoryId;
+function displayWorks(works) {
+  const gallery = document.querySelector(".gallery");
+  gallery.innerHTML = "";
 
-      const gallery = document.querySelector(".gallery");
+  works.forEach((element) => {
+    const img = document.createElement("img");
+    img.src = element.imageUrl;
+    img.alt = element.title;
 
-      gallery.appendChild(figure);
-    })
-  );
+    const figcaption = document.createElement("figcaption");
+    figcaption.innerText = element.title;
 
-/**
- * Création des Boutons des catégories reçues depuis l'API
- * @param {String} title Nom de la Catégorie
- * @param {Number} categoryId Id de la Catégorie
- */
+    const figure = document.createElement("figure");
+    figure.append(img, figcaption);
+    figure.classList.add("work");
+    figure.dataset.category = element.categoryId;
+
+    const gallery = document.querySelector(".gallery");
+
+    gallery.appendChild(figure);
+  });
+}
+
+// fetch categories
+// Question : Set Eviter les doublons catégories ?
+async function fetchCategories() {
+  const response = await fetch("http://localhost:5678/api/categories");
+  const categories = await response.json();
+  console.log(categories);
+  displayCategoryMenu(categories);
+
+  return categories;
+}
+
+function displayCategoryMenu(categories) {
+  const menu = document.querySelector(".gallery-categories");
+
+  categories.forEach((category, index) => {
+    if (index === 0) createCategoryBtn("Tous", "");
+    createCategoryBtn(category.name, category.id);
+  });
+}
+
 function createCategoryBtn(title, categoryId) {
   const container = document.querySelector(".gallery-categories");
   const Btn = document.createElement("button");
@@ -33,29 +58,21 @@ function createCategoryBtn(title, categoryId) {
   Btn.dataset.categoryId = categoryId;
   Btn.classList.add("category-btn");
 
-  Btn.addEventListener("click", () => handleFilters(categoryId));
+  Btn.addEventListener("click", () => handleFilters(categoryId, Btn));
   container.appendChild(Btn);
 }
 
-// fetch categories
-const categories = fetch("http://localhost:5678/api/categories")
-  .then((response) => response.json())
-  .then((categories) =>
-    categories.forEach((category, index) => {
-      if (index === 0) createCategoryBtn("Tous", "");
-      createCategoryBtn(category.name, category.id);
-    })
-  );
+async function handleFilters(categoryId, Btn) {
+  const works = await fetchWorks();
+  const filteredWorks = works.filter((work) => work.categoryId === categoryId);
 
-/**
- * Affichage ou non d'un Work en fonction de la catégorie
- * @param {Number} categoryId Id de la Catégorie
- */
-function handleFilters(categoryId) {
-  const works = document.querySelectorAll(".work");
-  works.forEach((work) => {
-    const category = Number(work.dataset.category);
-    if (category === categoryId || categoryId === "") work.style.display = "block";
-    else work.style.display = "none";
-  });
+  displayWorks(filteredWorks);
+
+  // Catégorie Btn selectionné
+  const selected = document.querySelector(".selected");
+  if (selected) selected.classList.remove("selected");
+  Btn.classList.add("selected");
 }
+
+fetchWorks();
+fetchCategories();
