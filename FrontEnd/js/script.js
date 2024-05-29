@@ -32,10 +32,15 @@ function displayWorks(works) {
 }
 
 // fetch categories
-// Question : Set Eviter les doublons catégories ?
+// Question : Set Eviter les doublons catégories, est-ce que c'est la bonne façon de faire ?
 async function fetchCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
-  const categories = await response.json();
+  const data = await response.json();
+
+  const categories = Array.from(new Set(data.map((category) => category.name))).map((name) =>
+    data.find((category) => category.name === name)
+  );
+
   console.log(categories);
   displayCategoryMenu(categories);
 
