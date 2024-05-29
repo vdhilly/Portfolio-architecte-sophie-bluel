@@ -21,6 +21,11 @@ const works = fetch("http://localhost:5678/api/works")
     })
   );
 
+/**
+ * Création des Boutons des catégories reçues depuis l'API
+ * @param {String} title Nom de la Catégorie
+ * @param {Number} categoryId Id de la Catégorie
+ */
 function createCategoryBtn(title, categoryId) {
   const container = document.querySelector(".gallery-categories");
   const Btn = document.createElement("button");
@@ -42,6 +47,10 @@ const categories = fetch("http://localhost:5678/api/categories")
     })
   );
 
+/**
+ * Affichage ou non d'un Work en fonction de la catégorie
+ * @param {Number} categoryId Id de la Catégorie
+ */
 function handleFilters(categoryId) {
   const works = document.querySelectorAll(".work");
   works.forEach((work) => {
