@@ -46,8 +46,7 @@ function handleFilters(categoryId) {
   const works = document.querySelectorAll(".work");
   works.forEach((work) => {
     const category = Number(work.dataset.category);
-    if (category === categoryId) work.style.display = "block";
-    else if (categoryId === "") work.style.display = "block";
+    if (category === categoryId || categoryId === "") work.style.display = "block";
     else work.style.display = "none";
   });
 }
