@@ -3,7 +3,6 @@ async function fetchWorks() {
   const response = await fetch("http://localhost:5678/api/works");
   const data = await response.json();
   displayWorks(data);
-  console.log(data);
 
   return data;
 }
@@ -32,7 +31,8 @@ function displayWorks(works) {
 }
 
 // fetch categories
-// Question : Set Eviter les doublons catégories, est-ce que c'est la bonne façon de faire ?
+// Question : Set utile pour Modale ?
+
 async function fetchCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
   const data = await response.json();
@@ -41,7 +41,6 @@ async function fetchCategories() {
     data.find((category) => category.name === name)
   );
 
-  console.log(categories);
   displayCategoryMenu(categories);
 
   return categories;
@@ -51,7 +50,7 @@ function displayCategoryMenu(categories) {
   const menu = document.querySelector(".gallery-categories");
 
   categories.forEach((category, index) => {
-    if (index === 0) createCategoryBtn("Tous", "");
+    if (index === 0) createCategoryBtn("Tous", 0);
     createCategoryBtn(category.name, category.id);
   });
 }
@@ -69,7 +68,7 @@ function createCategoryBtn(title, categoryId) {
 
 async function handleFilters(categoryId, Btn) {
   const works = await fetchWorks();
-  const filteredWorks = works.filter((work) => work.categoryId === categoryId);
+  const filteredWorks = categoryId === 0 ? works : works.filter((work) => work.categoryId === categoryId);
 
   displayWorks(filteredWorks);
 
