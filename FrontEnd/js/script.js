@@ -80,3 +80,9 @@ async function handleFilters(categoryId, Btn) {
 
 fetchWorks();
 fetchCategories();
+
+// Mode édition
+const token = localStorage.getItem("Token");
+console.log(token);
+if (token) {
+}
