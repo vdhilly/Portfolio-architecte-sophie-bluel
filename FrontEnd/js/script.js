@@ -8,20 +8,23 @@ function displayWorks(works, gallery) {
   gallery.innerHTML = "";
 
   works.forEach((element) => {
-    const img = document.createElement("img");
-    img.src = element.imageUrl;
-    img.alt = element.title;
-
-    const figcaption = document.createElement("figcaption");
-    figcaption.innerText = element.title;
-
-    const figure = document.createElement("figure");
-    figure.append(img, figcaption);
-    figure.classList.add("work");
-    figure.dataset.category = element.categoryId;
-
-    gallery.appendChild(figure);
+    addWorkToGallery(element);
   });
+}
+function addWorkToGallery(work) {
+  const img = document.createElement("img");
+  img.src = work.imageUrl;
+  img.alt = work.title;
+
+  const figcaption = document.createElement("figcaption");
+  figcaption.innerText = work.title;
+
+  const figure = document.createElement("figure");
+  figure.append(img, figcaption);
+  figure.classList.add("work");
+  figure.dataset.category = work.categoryId;
+
+  gallery.appendChild(figure);
 }
 
 // fetch categories
@@ -84,6 +87,8 @@ if (token) {
   displayModalGallery();
   displayModalAddCategories();
   openAndCloseModal();
+  handleSubmit();
+  postNewWork();
 }
 function openAndCloseModal() {
   const modify = document.querySelector(".modifyBtn");
@@ -126,23 +131,27 @@ function openAndCloseModal() {
   });
 }
 function displayModalGallery() {
-  const divGallery = document.querySelector(".gallery-modal");
   works.forEach((work) => {
-    const workId = work.id;
-    const figure = document.createElement("figure");
-    figure.classList.add(`figure-${workId}`);
-    figure.id = `figure-${workId}`;
-    const img = document.createElement("img");
-    const elementTrash = document.createElement("i");
-    elementTrash.classList.add("fa-solid", "fa-trash-can");
-    img.src = work.imageUrl;
-    divGallery.appendChild(figure);
-    figure.appendChild(img);
-    figure.appendChild(elementTrash);
+    addWorkToModalGallery(work);
+  });
+}
+function addWorkToModalGallery(work) {
+  console.log(work);
+  const divGallery = document.querySelector(".gallery-modal");
+  const workId = work.id;
+  const figure = document.createElement("figure");
+  figure.classList.add(`figure-${workId}`);
+  figure.id = `figure-${workId}`;
+  const img = document.createElement("img");
+  const elementTrash = document.createElement("i");
+  elementTrash.classList.add("fa-solid", "fa-trash-can");
+  img.src = work.imageUrl;
+  divGallery.appendChild(figure);
+  figure.appendChild(img);
+  figure.appendChild(elementTrash);
 
-    elementTrash.addEventListener("click", async function (event) {
-      deleteWorks(workId);
-    });
+  elementTrash.addEventListener("click", async function (event) {
+    deleteWorks(workId);
   });
 }
 async function displayModalAddCategories() {
@@ -194,3 +203,72 @@ function displayEditMode() {
   modifyBtn.innerHTML = `<i class="fa-regular fa-pen-to-square"><span>modifier</span></i>`;
   PortfolioTitle.appendChild(modifyBtn);
 }
+
+function handleSubmit() {
+  const inputAdd = document.getElementById("input-add");
+  const inputTitle = document.getElementById("input-title");
+  const selectCategory = document.getElementById("select-category");
+  const inputSubmit = document.getElementById("input-submit");
+  const updateStateBtnSubmit = () => {
+    const file = inputAdd.files[0];
+    if (!file || inputAdd.value === "" || inputTitle.value.trim() === "" || selectCategory.value === "") {
+      inputSubmit.disabled = true;
+      inputSubmit.style.cursor = "not-allowed";
+      inputSubmit.style.backgroundColor = "#d3d3d3";
+    } else {
+      inputSubmit.disabled = false;
+      inputSubmit.style.cursor = "pointer";
+      inputSubmit.style.backgroundColor = "#1d6154";
+    }
+  };
+  updateStateBtnSubmit();
+  inputAdd.addEventListener("input", updateStateBtnSubmit);
+  inputTitle.addEventListener("input", updateStateBtnSubmit);
+  selectCategory.addEventListener("change", updateStateBtnSubmit);
+}
+function postNewWork() {
+  const inputAdd = document.getElementById("input-add");
+  const inputTitle = document.getElementById("input-title");
+  const selectCategory = document.getElementById("select-category");
+  const inputSubmit = document.getElementById("input-submit");
+  inputSubmit.addEventListener("click", async (event) => {
+    event.preventDefault();
+    if (inputAdd.value === "" || inputTitle.value.trim() === "" || selectCategory.value === "") {
+      // Message pas tout rempli
+    } else {
+      const formData = new FormData();
+      formData.append("image", inputAdd.files[0]);
+      formData.append("title", inputTitle.value);
+      formData.append("category", selectCategory.value);
+      fetch("http://localhost:5678/api/works/", {
+        method: "POST",
+        body: formData,
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(async (response) => {
+          if (!response.ok) return;
+          const newWork = await response.json();
+          console.log(newWork);
+
+          // Ajout du projet dans la galerie
+          addWorkToGallery(newWork);
+          // Ajout de l'image dans la modale
+          addWorkToModalGallery(newWork);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  });
+}
+function logout() {
+  const logoutBtn = document.querySelector(".nav-logout.edit-mode");
+  logoutBtn.addEventListener("click", function (e) {
+    localStorage.removeItem("Token");
+    location.reload();
+  });
+}
+logout();

@@ -381,7 +381,13 @@ footer nav ul {
   font-size: 14px;
   font-family: "Work Sans";
 }
-
+.nav-logout {
+  display: none;
+}
+.nav-logout.edit-mode {
+  display: inline;
+  cursor: pointer;
+}
 /* Modale */
 #modal {
   position: fixed;
@@ -547,6 +553,7 @@ footer nav ul {
   font-weight: 500;
   align-content: center;
   justify-self: center;
+  cursor: pointer;
 }
 .desc-add {
   font-family: "Work Sans";
