@@ -24,7 +24,7 @@ form.addEventListener("submit", function (event) {
       const data = await response.json();
       if (response.status === 200) {
         const token = data.token;
-        localStorage.setItem("Token", data.token);
+        localStorage.setItem("Token", token);
         window.location.replace("index.html");
       }
     });

@@ -7,18 +7,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/9fffd9d6f7.js" crossorigin="anonymous"></script>
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
-    <script src="js/script.js" defer></script>
+    <script src="js/script.js" defer type="module"></script>
   </head>
   <body>
+    <div style="display: none" class="edit-mode-head edit-mode"><i class="fa-regular fa-pen-to-square"></i> Mode édition</div>
     <header>
       <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
       <nav>
         <ul>
           <li><a href="index.html">projets</a></li>
           <li>contact</li>
-          <li><a class="nav-login" href="login.html">login</a></li>
+          <li><a class="nav-login edit-mode-hide" href="login.html">login</a></li>
+          <li><a class="nav-logout edit-mode">logout</a></li>
           <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
         </ul>
       </nav>
@@ -43,8 +46,43 @@
         </article>
       </section>
       <section id="portfolio">
-        <h2>Mes Projets</h2>
-        <div class="gallery-categories"></div>
+        <div class="title-container">
+          <div class="title-portfolio"><h2>Mes Projets</h2></div>
+        </div>
+        <aside id="modal" aria-hidden="true">
+          <div id="modal-content">
+            <i class="fa-solid fa-xmark close-modal-content"></i>
+            <h3 class="modal-gallery-title">Galerie Photo</h3>
+            <div class="gallery-modal"></div>
+            <hr />
+            <button class="btn-add-img">Ajouter une image</button>
+          </div>
+          <div id="modal-add-content">
+            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-xmark close-modal-content"></i>
+            <form action="/upload" method="post" id="form-add">
+              <h3 class="title-add">Ajout photo</h3>
+              <label for="input-add" class="label-add">
+                <img src="" alt="image upload" class="img-preview" />
+                <span class="icon-image"><i class="fa-regular fa-image"></i></span>
+                <label for="input-add" class="label-input-add">+ Ajouter photo</label>
+                <input type="file" name="add-image" id="input-add" />
+                <span class="desc-add">jpeg, png : 4mo max</span>
+              </label>
+              <div class="div-input">
+                <label for="input-title">Titre</label>
+                <input type="text" id="input-title" placeholder="Entrer un titre..." />
+                <label for="select-category">Catégories</label>
+                <select name="select-category" id="select-category">
+                  <option value="" disabled selected>Sélectionner la catégorie...</option>
+                </select>
+                <hr class="bar-separator" />
+              </div>
+              <input type="submit" value="Valider" id="input-submit" />
+            </form>
+          </div>
+        </aside>
+        <div class="gallery-categories edit-mode-hide"></div>
         <div class="gallery"></div>
       </section>
       <section id="contact">
