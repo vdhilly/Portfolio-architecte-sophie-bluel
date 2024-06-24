@@ -75,11 +75,6 @@ async function handleFilters(categoryId, Btn) {
 }
 
 fetchCategories();
-// TO DO FAIRE DECONNEXION
-// localStorage.removeItem("Token");
-
-// Question, add qui slide ou simple apparition ?
-// Question Déroulant grave ?
 
 const token = localStorage.getItem("Token");
 if (token) {
@@ -105,7 +100,6 @@ function openAndCloseModal() {
     modalContent.style.display = "flex";
   });
 
-  // Echap fermer
   modal.addEventListener("click", (event) => {
     if (event.target === modal) {
       modal.style.display = "none";
@@ -124,6 +118,7 @@ function openAndCloseModal() {
   btnAddImg.addEventListener("click", () => {
     modalContent.style.display = "none";
     modalAddWork.style.display = "block";
+    resetAddWork();
   });
   returnBtn.addEventListener("click", () => {
     modalContent.style.display = "flex";
@@ -134,6 +129,19 @@ function displayModalGallery() {
   works.forEach((work) => {
     addWorkToModalGallery(work);
   });
+}
+function resetAddWork() {
+  const img = document.getElementById("img-preview");
+  img.style.display = "none";
+  const insertDiv = document.getElementById("insert-image-container");
+  insertDiv.style.display = "flex";
+
+  const imgInput = document.querySelector("input[name=add-image]");
+  const titleInput = document.getElementById("input-title");
+  const categorySelect = document.getElementById("select-category");
+  imgInput.value = "";
+  titleInput.value = "";
+  categorySelect.value = "";
 }
 function addWorkToModalGallery(work) {
   console.log(work);
@@ -219,6 +227,14 @@ function handleSubmit() {
       inputSubmit.disabled = false;
       inputSubmit.style.cursor = "pointer";
       inputSubmit.style.backgroundColor = "#1d6154";
+    }
+    if (file) {
+      let imageUrl = URL.createObjectURL(file);
+      const img = document.getElementById("img-preview");
+      img.src = imageUrl;
+      img.style.display = "block";
+      const insertDiv = document.getElementById("insert-image-container");
+      insertDiv.style.display = "none";
     }
   };
   updateStateBtnSubmit();

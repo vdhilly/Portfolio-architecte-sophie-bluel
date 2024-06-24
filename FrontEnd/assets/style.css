@@ -531,17 +531,23 @@ footer nav ul {
 }
 .img-preview {
   display: none;
+  height: 193px;
 }
+
 .label-add {
   display: flex;
   flex-direction: column;
   background: #e8f1f6;
   max-width: 420px;
   margin: auto;
-  padding: 20px;
   align-items: center;
   gap: 5px;
   border-radius: 3px;
+}
+.label-add #insert-image-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
 }
 .label-input-add {
   background: #cbd6dc;

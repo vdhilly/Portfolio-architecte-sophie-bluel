@@ -63,11 +63,13 @@
             <form action="/upload" method="post" id="form-add">
               <h3 class="title-add">Ajout photo</h3>
               <label for="input-add" class="label-add">
-                <img src="" alt="image upload" class="img-preview" />
-                <span class="icon-image"><i class="fa-regular fa-image"></i></span>
-                <label for="input-add" class="label-input-add">+ Ajouter photo</label>
-                <input type="file" name="add-image" id="input-add" />
-                <span class="desc-add">jpeg, png : 4mo max</span>
+                <img src="" alt="image upload" id="img-preview" class="img-preview" />
+                <div id="insert-image-container">
+                  <span class="icon-image"><i class="fa-regular fa-image"></i></span>
+                  <label for="input-add" class="label-input-add">+ Ajouter photo</label>
+                  <input type="file" name="add-image" id="input-add" />
+                  <span class="desc-add">jpeg, png : 4mo max</span>
+                </div>
               </label>
               <div class="div-input">
                 <label for="input-title">Titre</label>
