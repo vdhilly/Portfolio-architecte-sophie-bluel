@@ -384,8 +384,7 @@ footer nav ul {
 .nav-logout {
   display: none;
 }
-.nav-logout.edit-mode {
-  display: inline;
+nav a {
   cursor: pointer;
 }
 /* Modale */
@@ -581,4 +580,11 @@ footer nav ul {
   margin-bottom: 20px;
   border: none;
   box-shadow: 0px 4px 14px 0px #00000017;
+}
+.red-message {
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+  background: #b1663c;
+  border-radius: 22px;
 }

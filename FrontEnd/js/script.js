@@ -22,6 +22,7 @@ function addWorkToGallery(work) {
   const figure = document.createElement("figure");
   figure.append(img, figcaption);
   figure.classList.add("work");
+  figure.id = "work-" + work.id;
   figure.dataset.category = work.categoryId;
 
   gallery.appendChild(figure);
@@ -98,6 +99,7 @@ function openAndCloseModal() {
   modify.addEventListener("click", function () {
     modal.style.display = "flex";
     modalContent.style.display = "flex";
+    modalAddWork.style.display = "none";
   });
 
   modal.addEventListener("click", (event) => {
@@ -189,6 +191,9 @@ function deleteWorks(workId) {
 
       const figure = document.getElementById(`figure-${workId}`);
       figure.remove();
+
+      const galleryFigure = document.getElementById(`work-${workId}`);
+      galleryFigure.remove();
     })
     .catch((error) => {
       console.log(error);
@@ -199,6 +204,7 @@ function displayEditMode() {
   const toShow = document.querySelectorAll(".edit-mode");
   toShow.forEach((element) => {
     element.style.display = "block";
+    if (element.classList.contains("nav-logout")) element.style.display = "inline";
   });
   const toHide = document.querySelectorAll(".edit-mode-hide");
   toHide.forEach((element) => {
@@ -265,14 +271,29 @@ function postNewWork() {
         },
       })
         .then(async (response) => {
-          if (!response.ok) return;
-          const newWork = await response.json();
-          console.log(newWork);
+          if (response.ok) {
+            const newWork = await response.json();
+            console.log(newWork);
 
-          // Ajout du projet dans la galerie
-          addWorkToGallery(newWork);
-          // Ajout de l'image dans la modale
-          addWorkToModalGallery(newWork);
+            // Ajout du projet dans la galerie
+            addWorkToGallery(newWork);
+            // Ajout de l'image dans la modale
+            addWorkToModalGallery(newWork);
+
+            const modalContent = document.getElementById("modal-content");
+            const modalAddWork = document.getElementById("modal-add-content");
+
+            modalContent.style.display = "flex";
+            modalAddWork.style.display = "none";
+          } else {
+            const form = document.getElementById(".div-input");
+
+            const message = document.createElement("p");
+            message.classList.add("red-message");
+            message.innerText = "Email ou Mot de passe incorrect";
+
+            form.prepend(message);
+          }
         })
         .catch((error) => {
           console.log(error);
