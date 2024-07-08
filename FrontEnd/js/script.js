@@ -270,7 +270,7 @@ function postNewWork() {
 
             const message = document.createElement("p");
             message.classList.add("red-message");
-            message.innerText = "Email ou Mot de passe incorrect";
+            message.innerText = "Quelque chose ne s'est pas passé comme prévu";
 
             form.prepend(message);
           }
