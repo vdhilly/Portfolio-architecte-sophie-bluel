@@ -1,4 +1,3 @@
-// fetch pour aller chercher les travaux
 const response = await fetch("http://localhost:5678/api/works");
 const works = await response.json();
 const gallery = document.querySelector(".gallery");
@@ -27,10 +26,6 @@ function addWorkToGallery(work) {
 
   gallery.appendChild(figure);
 }
-
-// fetch categories
-// Question : Set utile pour Modale ?
-// à l'ajout il ne faut pas actualiser la page, d'où le Set qui empêchera les doublons des images
 
 async function fetchCategories() {
   const response = await fetch("http://localhost:5678/api/categories");
