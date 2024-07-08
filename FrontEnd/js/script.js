@@ -1,9 +1,9 @@
 const response = await fetch("http://localhost:5678/api/works");
 const works = await response.json();
 const gallery = document.querySelector(".gallery");
-displayWorks(works, gallery);
+displayWorks(works);
 
-function displayWorks(works, gallery) {
+function displayWorks(works) {
   gallery.innerHTML = "";
 
   works.forEach((element) => {
@@ -59,6 +59,7 @@ function createCategoryBtn(title, categoryId) {
   Btn.addEventListener("click", () => handleFilters(categoryId, Btn));
   container.appendChild(Btn);
 }
+fetchCategories();
 
 async function handleFilters(categoryId, Btn) {
   const filteredWorks = categoryId === 0 ? works : works.filter((work) => work.categoryId === categoryId);
@@ -69,8 +70,6 @@ async function handleFilters(categoryId, Btn) {
   if (selected) selected.classList.remove("selected");
   Btn.classList.add("selected");
 }
-
-fetchCategories();
 
 const token = localStorage.getItem("Token");
 if (token) {
