@@ -80,6 +80,24 @@ if (token) {
   handleSubmit();
   postNewWork();
 }
+function displayEditMode() {
+  const toShow = document.querySelectorAll(".edit-mode");
+  toShow.forEach((element) => {
+    element.style.display = "block";
+    if (element.classList.contains("nav-logout")) element.style.display = "inline";
+  });
+  const toHide = document.querySelectorAll(".edit-mode-hide");
+  toHide.forEach((element) => {
+    element.style.display = "none";
+  });
+
+  const PortfolioTitle = document.querySelector("#portfolio h2");
+  const modifyBtn = document.createElement("a");
+  modifyBtn.href = "#";
+  modifyBtn.classList.add("modifyBtn");
+  modifyBtn.innerHTML = `<i class="fa-regular fa-pen-to-square"><span>modifier</span></i>`;
+  PortfolioTitle.appendChild(modifyBtn);
+}
 function openAndCloseModal() {
   const modify = document.querySelector(".modifyBtn");
   const modal = document.getElementById("modal");
@@ -126,21 +144,7 @@ function displayModalGallery() {
     addWorkToModalGallery(work);
   });
 }
-function resetAddWork() {
-  const img = document.getElementById("img-preview");
-  img.style.display = "none";
-  const insertDiv = document.getElementById("insert-image-container");
-  insertDiv.style.display = "flex";
-
-  const imgInput = document.querySelector("input[name=add-image]");
-  const titleInput = document.getElementById("input-title");
-  const categorySelect = document.getElementById("select-category");
-  imgInput.value = "";
-  titleInput.value = "";
-  categorySelect.value = "";
-}
 function addWorkToModalGallery(work) {
-  console.log(work);
   const divGallery = document.querySelector(".gallery-modal");
   const workId = work.id;
   const figure = document.createElement("figure");
@@ -181,7 +185,7 @@ function deleteWorks(workId) {
     },
   })
     .then((response) => {
-      if (!response.ok) return;
+      if (!response.ok) return alert("Quelque chose ne s'est pas passé comme prévu");
 
       const figure = document.getElementById(`figure-${workId}`);
       figure.remove();
@@ -191,25 +195,8 @@ function deleteWorks(workId) {
     })
     .catch((error) => {
       console.log(error);
+      return alert("Quelque chose ne s'est pas passé comme prévu");
     });
-}
-
-function displayEditMode() {
-  const toShow = document.querySelectorAll(".edit-mode");
-  toShow.forEach((element) => {
-    element.style.display = "block";
-    if (element.classList.contains("nav-logout")) element.style.display = "inline";
-  });
-  const toHide = document.querySelectorAll(".edit-mode-hide");
-  toHide.forEach((element) => {
-    element.style.display = "none";
-  });
-  const PortfolioTitle = document.querySelector("#portfolio h2");
-  const modifyBtn = document.createElement("a");
-  modifyBtn.href = "#";
-  modifyBtn.classList.add("modifyBtn");
-  modifyBtn.innerHTML = `<i class="fa-regular fa-pen-to-square"><span>modifier</span></i>`;
-  PortfolioTitle.appendChild(modifyBtn);
 }
 
 function handleSubmit() {
@@ -250,7 +237,7 @@ function postNewWork() {
   inputSubmit.addEventListener("click", async (event) => {
     event.preventDefault();
     if (inputAdd.value === "" || inputTitle.value.trim() === "" || selectCategory.value === "") {
-      // Message pas tout rempli
+      return alert("Vous devez remplir tous les champs du formulaire");
     } else {
       const formData = new FormData();
       formData.append("image", inputAdd.files[0]);
@@ -267,7 +254,6 @@ function postNewWork() {
         .then(async (response) => {
           if (response.ok) {
             const newWork = await response.json();
-            console.log(newWork);
 
             // Ajout du projet dans la galerie
             addWorkToGallery(newWork);
@@ -291,9 +277,23 @@ function postNewWork() {
         })
         .catch((error) => {
           console.log(error);
+          return alert("Quelque chose ne s'est pas passé comme prévu");
         });
     }
   });
+}
+function resetAddWork() {
+  const img = document.getElementById("img-preview");
+  img.style.display = "none";
+  const insertDiv = document.getElementById("insert-image-container");
+  insertDiv.style.display = "flex";
+
+  const imgInput = document.querySelector("input[name=add-image]");
+  const titleInput = document.getElementById("input-title");
+  const categorySelect = document.getElementById("select-category");
+  imgInput.value = "";
+  titleInput.value = "";
+  categorySelect.value = "";
 }
 function logout() {
   const logoutBtn = document.querySelector(".nav-logout.edit-mode");

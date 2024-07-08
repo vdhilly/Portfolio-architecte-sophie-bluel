@@ -11,7 +11,6 @@ form.addEventListener("submit", function (event) {
       email: email,
       password: password,
     });
-
     fetch("http://localhost:5678/api/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,7 +24,7 @@ form.addEventListener("submit", function (event) {
           window.location.replace("index.html");
 
           const msgExist = document.querySelector(".red-message");
-          msgExist.remove();
+          if (msgExist) msgExist.remove();
         } else {
           const form = document.getElementById("login-form");
 
@@ -37,7 +36,8 @@ form.addEventListener("submit", function (event) {
         }
       })
       .catch((error) => {
-        return alert("Quelque chose ne s'est pas passé comme prévu.");
+        console.log(error);
+        return alert("Quelque chose ne s'est pas passé comme prévu");
       });
   }
 });
