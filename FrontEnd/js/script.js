@@ -194,7 +194,6 @@ function deleteWorks(workId) {
       galleryFigure.remove();
     })
     .catch((error) => {
-      console.log(error);
       return alert("Quelque chose ne s'est pas passé comme prévu");
     });
 }
@@ -276,7 +275,6 @@ function postNewWork() {
           }
         })
         .catch((error) => {
-          console.log(error);
           return alert("Quelque chose ne s'est pas passé comme prévu");
         });
     }

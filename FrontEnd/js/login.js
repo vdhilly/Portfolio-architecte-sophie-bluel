@@ -36,7 +36,6 @@ form.addEventListener("submit", function (event) {
         }
       })
       .catch((error) => {
-        console.log(error);
         return alert("Quelque chose ne s'est pas passé comme prévu");
       });
   }
